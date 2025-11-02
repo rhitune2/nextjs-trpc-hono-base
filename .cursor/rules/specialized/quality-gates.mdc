@@ -1,0 +1,369 @@
+---
+description: Quality control gates - Automatic validation system and code quality metrics
+globs:
+  - "**/*.js"
+  - "**/*.jsx"
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.vue"
+  - "**/*.py"
+alwaysApply: true
+priority: 2
+triggers: ['pre_implementation', 'post_implementation', 'code_commit', 'quality_check']
+enforcement_level: zero_tolerance
+validation_layers: ['syntax', 'structure', 'size', 'dependencies', 'performance']
+depends_on: ['file-size-enforcement.mdc', 'clean-code-standards.mdc']
+---
+
+# QUALITY CONTROL GATES - AUTOMATIC VALIDATION
+
+## CORE PHILOSOPHY - PREVENTION OVER CORRECTION
+
+It is more efficient and safer to prevent quality problems from the start rather than fixing them later. This component performs automatic checks before and after every implementation, preventing problematic code from entering the system.
+
+## MULTI-LAYER VALIDATION SYSTEM
+
+### LAYER 1: PRE-IMPLEMENTATION GATES
+Mandatory checks before every code change:
+
+```javascript
+function preImplementationGate(targetFiles, proposedChanges) {
+    const validationResults = {
+        fileSizeCheck: validateFileSizes(targetFiles),
+        architectureCompliance: checkArchitecturalRules(proposedChanges),
+        dependencyHealth: analyzeDependencies(targetFiles),
+        codebaseReadiness: assessCodebaseState(targetFiles)
+    };
+    
+    return determineImplementationEligibility(validationResults);
+}
+```
+
+**Pre-implementation checklist:**
+- [ ] **Target file sizes** under 700 lines?
+- [ ] **Current code quality** compliant with standards?
+- [ ] **Dependency conflicts** exist?
+- [ ] **Architecture violations** present?
+- [ ] **Technical debt** at critical level?
+
+### LAYER 2: DURING-IMPLEMENTATION MONITORING
+Real-time quality tracking during implementation:
+
+```javascript
+function realTimeQualityMonitoring(implementationProgress) {
+    const metrics = {
+        linesAdded: countAddedLines(),
+        complexityIncrease: measureComplexityGrowth(),
+        importChanges: trackImportModifications(),
+        codeSmells: detectEmergingSmells()
+    };
+    
+    if (metrics.linesAdded > SAFE_THRESHOLD) {
+        triggerSizeWarning();
+    }
+    
+    return metrics;
+}
+```
+
+### LAYER 3: POST-IMPLEMENTATION VALIDATION
+Comprehensive check after implementation:
+
+```javascript
+function postImplementationGate(modifiedFiles) {
+    const finalValidation = {
+        codeQuality: assessFinalCodeQuality(modifiedFiles),
+        performanceImpact: measurePerformanceImpact(modifiedFiles),
+        maintainabilityScore: calculateMaintainabilityScore(modifiedFiles),
+        testCoverage: validateTestCoverage(modifiedFiles),
+        documentationCompleteness: checkDocumentation(modifiedFiles)
+    };
+    
+    return generateQualityReport(finalValidation);
+}
+```
+
+## QUALITY METRICS - MEASUREMENT STANDARDS
+
+### CORE METRICS - CORE MEASUREMENTS
+
+**File Size Metrics:**
+- Lines per file (hard limit: 1000)
+- Lines per function (recommended: <20)
+- Methods per class (recommended: <10)
+- Complexity per function (cyclomatic complexity)
+
+**Code Quality Metrics:**
+- Unused imports count (target: 0)
+- Dead code blocks (target: 0)
+- Duplicate code percentage (target: <5%)
+- Magic numbers count (target: minimal)
+
+**Dependency Metrics:**
+- External dependencies count
+- Circular dependencies (target: 0)
+- Unused dependencies (target: 0)
+- Version conflicts (target: 0)
+
+### QUALITY SCORING SYSTEM
+
+```javascript
+function calculateQualityScore(metrics) {
+    const weights = {
+        fileSize: 0.25,        // 25% - critical importance
+        codeCleanness: 0.25,   // 25% - cleanliness
+        maintainability: 0.20, // 20% - maintainability
+        performance: 0.15,     // 15% - performance
+        documentation: 0.15    // 15% - documentation
+    };
+    
+    const score = (
+        metrics.fileSizeScore * weights.fileSize +
+        metrics.cleanlinessScore * weights.codeCleanness +
+        metrics.maintainabilityScore * weights.maintainability +
+        metrics.performanceScore * weights.performance +
+        metrics.documentationScore * weights.documentation
+    );
+    
+    return Math.round(score * 100); // 0-100 scale
+}
+```
+
+## AUTOMATIC VALIDATION RULES
+
+### RED LINES - NON-NEGOTIABLE RULES
+
+**Absolute blockers (stops operation):**
+- File size > 1000 lines
+- Syntax errors
+- Critical security vulnerabilities
+- Circular dependencies
+- Build failures
+
+**Warning triggers (warn but continue):**
+- File size between 700-999 lines
+- High complexity functions
+- Missing documentation
+- Performance concerns
+- Code smells
+
+### VALIDATION REPORT FORMAT
+
+```javascript
+const qualityReport = {
+    overallScore: 87, // 0-100
+    status: 'PASSED_WITH_WARNINGS',
+    
+    breakdown: {
+        fileSize: { score: 95, status: 'EXCELLENT', issues: [] },
+        cleanliness: { score: 90, status: 'GOOD', issues: ['1 unused import'] },
+        maintainability: { score: 85, status: 'GOOD', issues: [] },
+        performance: { score: 80, status: 'ACCEPTABLE', issues: ['Large bundle size'] },
+        documentation: { score: 75, status: 'NEEDS_IMPROVEMENT', issues: ['Missing JSDoc'] }
+    },
+    
+    recommendations: [
+        'Clean remaining unused import',
+        'Add JSDoc documentation',
+        'Consider bundle size optimization'
+    ],
+    
+    blockers: [],
+    passedGates: ['PRE_IMPLEMENTATION', 'DURING_IMPLEMENTATION', 'POST_IMPLEMENTATION']
+};
+```
+
+## FAILURE HANDLING - ERROR MANAGEMENT
+
+### QUALITY GATE FAILURES
+
+**Action for immediate blockers:**
+```
+🚫 KALİTE GATE BAŞARISIZ
+🎯 Blocker: [specific issue]
+📊 Quality Score: [X]/100 (minimum 70 required)
+⚠️ Kritik sorunlar:
+   • [List of blocking issues]
+
+🔧 GEREKLİ AKSİYONLAR:
+   1. [Specific fix steps]
+   2. [Validation repetition]
+   3. [Approval process]
+
+❌ İmplementasyon bu sorunlar çözülene kadar bloke edildi.
+```
+
+**Information for warning status:**
+```
+⚠️ KALİTE UYARILARI TESPİT EDİLDİ
+📊 Quality Score: [X]/100 (acceptable level)
+💡 İyileştirme önerileri:
+   • [Improvement suggestions]
+
+✅ İmplementasyon onaylandı ancak iyileştirmeler önerilir.
+```
+
+### PROGRESSIVE IMPROVEMENT
+
+**Quality debt tracking:**
+```javascript
+function trackQualityDebt(currentMetrics, historicalData) {
+    const trends = {
+        improving: calculateImprovementTrend(historicalData),
+        degrading: identifyQualityRegression(currentMetrics),
+        stable: assessStabilityMetrics(historicalData)
+    };
+    
+    return generateTrendReport(trends);
+}
+```
+
+## SPECIAL SITUATION MANAGEMENT
+
+### LEGACY CODE HANDLING
+Special approach for existing low-quality code:
+
+**Legacy tolerance rules:**
+- Don't make existing bad code worse (don't make it worse)
+- New code must be high quality (new code must be excellent)  
+- Progressive improvement (improve step by step)
+- Refactoring opportunities (improvement opportunities)
+
+### EMERGENCY OVERRIDES
+Quality gate rules for emergencies:
+
+```javascript
+const emergencyQualityRules = {
+    maxQualityScoreReduction: 15, // Maximum 15 point reduction
+    mandatoryPostEmergencyCleanup: true,
+    emergencyDocumentationRequired: true,
+    automaticRefactoringScheduled: true
+};
+```
+
+## INTEGRATION HOOKS - SYSTEM INTEGRATION
+
+### CONTINUOUS MONITORING
+Hooks for continuous quality tracking:
+
+**File size monitoring:**
+```javascript
+// Automatic size check on every file modification
+onFileModification(file => {
+    const newSize = getFileSize(file);
+    if (newSize > 700) {
+        triggerSizeAlert(file, newSize);
+    }
+});
+```
+
+**Code quality monitoring:**
+```javascript
+// Quality analysis on every code commit
+onCodeCommit(changes => {
+    const qualityDelta = calculateQualityChange(changes);
+    if (qualityDelta < 0) {
+        reportQualityRegression(changes, qualityDelta);
+    }
+});
+```
+
+### REPORTING INTEGRATION
+
+**Dashboard metrics:**
+- Daily quality scores
+- Quality trend analysis  
+- File size distribution
+- Technical debt accumulation
+- Refactoring effectiveness
+
+## QUALITY GATE CONFIGURATION
+
+### CONFIGURABILITY
+Configurable thresholds for different project types:
+
+```javascript
+const qualityThresholds = {
+    newProject: {
+        minQualityScore: 90,
+        maxFileSize: 500,
+        zeroToleranceRules: ['unused_imports', 'dead_code']
+    },
+    
+    existingProject: {
+        minQualityScore: 75,
+        maxFileSize: 700,
+        progressiveImprovement: true
+    },
+    
+    legacyProject: {
+        minQualityScore: 60,
+        maxFileSize: 1000,
+        gradualMigration: true
+    }
+};
+```
+
+### TEAM COORDINATION
+Quality gate coordination for team work:
+
+**Multi-developer scenarios:**
+- Merge conflict quality assessment
+- Code review quality gate integration  
+- Team quality metric aggregation
+- Cross-developer quality consistency
+
+## AUTOMATED IMPROVEMENT SUGGESTIONS
+
+### SMART RECOMMENDATIONS
+Automatic solution suggestions for quality issues:
+
+```javascript
+function generateImprovementSuggestions(qualityIssues) {
+    const suggestions = qualityIssues.map(issue => ({
+        issue: issue.type,
+        severity: issue.severity,
+        autoFixable: issue.canAutoFix,
+        suggestion: generateSpecificSuggestion(issue),
+        estimatedEffort: estimateFixEffort(issue)
+    }));
+    
+    return prioritizeSuggestions(suggestions);
+}
+```
+
+**Suggestion categories:**
+- Auto-fixable (unused imports, formatting)
+- Guided refactoring (component splitting, extraction)
+- Architecture improvements (design pattern applications)
+- Performance optimizations (bundle size, rendering)
+- Documentation enhancements (JSDoc, README updates)
+
+## QUALITY GATE REPORTING
+
+### SUMMARY REPORTING
+Summary report for each implementation:
+
+```
+✅ KALİTE GATE RAPORU
+📊 Genel Skor: [X]/100 (SUCCESS/WARNING/FAILURE)
+
+🎯 KALİTE BREAKDOWN:
+   📏 Dosya Boyutu: [X]/100 - [STATUS]
+   🧹 Kod Temizliği: [X]/100 - [STATUS]  
+   🔧 Sürdürülebilirlik: [X]/100 - [STATUS]
+   ⚡ Performans: [X]/100 - [STATUS]
+   📚 Dokümantasyon: [X]/100 - [STATUS]
+
+🔍 TESPİT EDİLEN SORUNLAR: [X count]
+   • [Issue list with priorities]
+
+💡 İYİLEŞTİRME ÖNERİLERİ: [X count]
+   • [Prioritized improvement suggestions]
+
+✅ SONUÇ: [Implementation approved/requires fixes/blocked]
+```
+
+---
+
+*Quality is not a luxury but a necessity. This quality gate system ensures every code change makes the system better.*

@@ -1,0 +1,527 @@
+---
+description: Technology stack specific rules - shadcn/ui, Bun, tRPC, TanStack Query, Hono best practices
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.js"
+  - "**/*.jsx"
+alwaysApply: true
+priority: 2
+triggers: ['ui_implementation', 'api_development', 'data_fetching', 'package_management']
+tech_stack: ['shadcn/ui', 'bun', 'trpc', 'tanstack-query', 'hono', 'nextjs-16']
+depends_on: ['clean-code-standards.mdc', 'file-size-enforcement.mdc']
+---
+
+# TECHNOLOGY STACK RULES - PROJECT-SPECIFIC STANDARDS
+
+## CORE PHILOSOPHY - STACK-SPECIFIC BEST PRACTICES
+
+This project uses a modern, type-safe stack. All implementations must follow the specific patterns and conventions of these technologies.
+
+## 🎨 SHADCN/UI COMPONENT USAGE
+
+### MANDATORY RULES
+
+**Always use shadcn/ui components:**
+- ✅ Use shadcn/ui components for all UI elements
+- ✅ Do not create custom components unless explicitly mentioned
+- ✅ Follow shadcn/ui component patterns and prop conventions
+- ✅ Use shadcn/ui theming system for styling
+
+**Component import pattern:**
+```typescript
+// ✅ CORRECT - shadcn/ui imports
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+// ❌ WRONG - Custom component creation without reason
+import { CustomButton } from "./CustomButton"; // Only if explicitly needed
+```
+
+**Component composition pattern:**
+```typescript
+// ✅ CORRECT - Using shadcn/ui components
+const UserForm = () => {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>User Registration</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form>
+          <Label htmlFor="email">Email</Label>
+          <Input id="email" type="email" />
+          <Button type="submit">Submit</Button>
+        </form>
+      </CardContent>
+    </Card>
+  );
+};
+```
+
+### SHADCN/UI CUSTOMIZATION
+
+**When customization is needed:**
+- ✅ Extend shadcn/ui components using `cn()` utility for class merging
+- ✅ Use shadcn/ui's variant system (Button variants, etc.)
+- ✅ Compose shadcn/ui components rather than creating new ones
+
+```typescript
+// ✅ CORRECT - Extending shadcn/ui
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+const CustomButton = ({ className, ...props }) => {
+  return (
+    <Button
+      className={cn("custom-styles", className)}
+      {...props}
+    />
+  );
+};
+```
+
+## 🚀 BUN PACKAGE MANAGEMENT
+
+### MANDATORY BUN USAGE
+
+**Always use Bun for package management:**
+- ✅ Use `bun install` for installing dependencies
+- ✅ Use `bun run dev` for development server
+- ✅ Use `bun run build` for production builds
+- ❌ Never use `npm install`, `npm run dev`, or `npm run build`
+- ❌ Never use `yarn` commands unless specifically required
+
+**Package installation:**
+```bash
+# ✅ CORRECT
+bun add @tanstack/react-query
+bun add -d @types/node
+
+# ❌ WRONG
+npm install @tanstack/react-query
+yarn add @tanstack/react-query
+```
+
+**Script execution:**
+```bash
+# ✅ CORRECT
+bun run dev
+bun run build
+bun run lint
+
+# ❌ WRONG
+npm run dev
+yarn dev
+```
+
+### BUN-SPECIFIC CONFIGURATION
+
+**bun.lockb should be committed:**
+- ✅ Always commit bun.lockb file
+- ✅ Use Bun's native TypeScript support
+- ✅ Leverage Bun's fast execution for scripts
+
+## 🔌 TANSTACK QUERY (REACT QUERY) - DATA FETCHING
+
+### MANDATORY PATTERNS
+
+**Always use TanStack Query for data fetching:**
+- ✅ Use `useQuery` for data fetching
+- ✅ Use `useMutation` for data mutations
+- ✅ Use `useQueryClient` for cache management
+- ✅ Always define proper query keys
+- ✅ Implement proper error handling and loading states
+
+**Query setup pattern:**
+```typescript
+// ✅ CORRECT - TanStack Query pattern
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { trpc } from "@/utils/trpc";
+
+const UserProfile = ({ userId }: { userId: string }) => {
+  const { data, isLoading, error } = trpc.user.getById.useQuery({ id: userId });
+  
+  const queryClient = useQueryClient();
+  
+  const updateUser = trpc.user.update.useMutation({
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user", userId] });
+    },
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+  
+  return <div>{data?.name}</div>;
+};
+```
+
+**Query key organization:**
+```typescript
+// ✅ CORRECT - Organized query keys
+const queryKeys = {
+  users: {
+    all: ["users"] as const,
+    detail: (id: string) => ["users", id] as const,
+    list: (filters: UserFilters) => ["users", "list", filters] as const,
+  },
+} as const;
+```
+
+### TANSTACK QUERY BEST PRACTICES
+
+**Always implement proper error handling:**
+```typescript
+// ✅ CORRECT - Error handling
+const { data, error, isError } = useQuery({
+  queryKey: ["users"],
+  queryFn: fetchUsers,
+  retry: 3,
+  retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+});
+
+if (isError) {
+  // Handle error properly with shadcn/ui Alert component
+  return <Alert variant="destructive">{error.message}</Alert>;
+}
+```
+
+## 🎯 TRPC - TYPE-SAFE API
+
+### MANDATORY TRPC PATTERNS
+
+**Always use tRPC for API calls:**
+- ✅ Use tRPC routers for all API endpoints
+- ✅ Leverage tRPC's type safety
+- ✅ Use tRPC client hooks in React components
+- ✅ Organize routers in the `/routers` directory
+- ✅ Use proper input/output validation with Zod
+
+**Router definition pattern:**
+```typescript
+// ✅ CORRECT - tRPC router structure
+// routers/user.ts
+import { z } from "zod";
+import { router, publicProcedure } from "../lib/trpc";
+
+export const userRouter = router({
+  getById: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ input }) => {
+      // Implementation
+      return user;
+    }),
+    
+  update: publicProcedure
+    .input(z.object({ 
+      id: z.string(),
+      name: z.string().min(1).optional(),
+    }))
+    .mutation(async ({ input }) => {
+      // Implementation
+      return updatedUser;
+    }),
+});
+```
+
+**Client usage pattern:**
+```typescript
+// ✅ CORRECT - Using tRPC client
+import { trpc } from "@/utils/trpc";
+
+const UserComponent = ({ userId }: { userId: string }) => {
+  const { data, isLoading } = trpc.user.getById.useQuery({ id: userId });
+  const updateUser = trpc.user.update.useMutation();
+  
+  const handleUpdate = () => {
+    updateUser.mutate({ id: userId, name: "New Name" });
+  };
+  
+  return <div>{data?.name}</div>;
+};
+```
+
+**Router organization:**
+```typescript
+// ✅ CORRECT - Router index structure
+// routers/index.ts
+import { router } from "../lib/trpc";
+import { userRouter } from "./user";
+import { postRouter } from "./post";
+
+export const appRouter = router({
+  user: userRouter,
+  post: postRouter,
+});
+
+export type AppRouter = typeof appRouter;
+```
+
+### TRPC ERROR HANDLING
+
+**Always handle tRPC errors properly:**
+```typescript
+// ✅ CORRECT - Error handling
+const updateMutation = trpc.user.update.useMutation({
+  onError: (error) => {
+    // Use shadcn/ui toast or alert for errors
+    toast.error(error.message);
+  },
+  onSuccess: () => {
+    toast.success("User updated successfully");
+  },
+});
+```
+
+## 🌐 HONO - BACKEND FRAMEWORK
+
+### MANDATORY HONO PATTERNS
+
+**Always use Hono for API routes:**
+- ✅ Use Hono's type-safe routing
+- ✅ Integrate Hono with tRPC adapter
+- ✅ Use Hono middleware for authentication, CORS, etc.
+- ✅ Follow Hono's routing conventions
+
+**Hono + tRPC integration:**
+```typescript
+// ✅ CORRECT - Hono + tRPC setup
+// app/api/[...route]/route.ts
+import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
+import { appRouter } from "@/routers";
+import { Hono } from "hono";
+import { cors } from "hono/cors";
+
+const app = new Hono().basePath("/api");
+
+// CORS middleware
+app.use("*", cors());
+
+// tRPC handler
+app.all(
+  "/trpc/*",
+  async (c) => {
+    return fetchRequestHandler({
+      endpoint: "/api/trpc",
+      req: c.req.raw,
+      router: appRouter,
+      createContext: () => ({}),
+    });
+  }
+);
+
+export default app;
+```
+
+**Hono route handlers:**
+```typescript
+// ✅ CORRECT - Hono route pattern
+import { Hono } from "hono";
+
+const app = new Hono();
+
+app.get("/health", (c) => {
+  return c.json({ status: "ok" });
+});
+
+app.post("/webhook", async (c) => {
+  const body = await c.req.json();
+  // Handle webhook
+  return c.json({ received: true });
+});
+```
+
+## 🔗 NEXT.JS 15 INTEGRATION
+
+### MANDATORY NEXT.JS 15 PATTERNS
+
+**Always follow Next.js 15 conventions:**
+- ✅ Use App Router (not Pages Router)
+- ✅ Use Server Components by default
+- ✅ Use Client Components only when needed ("use client")
+- ✅ Use `next/font` for font optimization
+- ✅ Use Next.js Image and Link components
+- ✅ Organize API routes in `/app/api` directory
+
+**Server Component pattern:**
+```typescript
+// ✅ CORRECT - Server Component (default)
+// app/users/page.tsx
+import { trpc } from "@/utils/trpc";
+
+export default async function UsersPage() {
+  const users = await trpc.user.list.query();
+  
+  return (
+    <div>
+      {users.map((user) => (
+        <div key={user.id}>{user.name}</div>
+      ))}
+    </div>
+  );
+}
+```
+
+**Client Component pattern:**
+```typescript
+// ✅ CORRECT - Client Component (when needed)
+"use client";
+
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+
+export function InteractiveComponent() {
+  const [count, setCount] = useState(0);
+  
+  return (
+    <Button onClick={() => setCount(count + 1)}>
+      Count: {count}
+    </Button>
+  );
+}
+```
+
+### NEXT.JS 15 + TRPC INTEGRATION
+
+**Server-side tRPC usage:**
+```typescript
+// ✅ CORRECT - Server-side tRPC
+import { createCaller } from "@/routers";
+import { appRouter } from "@/routers";
+
+export default async function ServerPage() {
+  const caller = createCaller(appRouter);
+  const users = await caller.user.list();
+  
+  return <div>{/* Render users */}</div>;
+}
+```
+
+## 🎯 STACK INTEGRATION PATTERNS
+
+### COMPLETE EXAMPLE - FULL STACK FLOW
+
+```typescript
+// ✅ CORRECT - Complete integration example
+
+// 1. Router definition (routers/user.ts)
+export const userRouter = router({
+  list: publicProcedure.query(async () => {
+    // Database query using Drizzle
+    return await db.select().from(users);
+  }),
+});
+
+// 2. Server Component (app/users/page.tsx)
+import { appRouter } from "@/routers";
+
+export default async function UsersPage() {
+  const caller = appRouter.createCaller({});
+  const users = await caller.user.list();
+  
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Users</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <UsersList users={users} />
+      </CardContent>
+    </Card>
+  );
+}
+
+// 3. Client Component with TanStack Query (components/UsersList.tsx)
+"use client";
+
+import { trpc } from "@/utils/trpc";
+import { Button } from "@/components/ui/button";
+
+export function UsersList({ initialUsers }: { initialUsers: User[] }) {
+  const { data: users } = trpc.user.list.useQuery(undefined, {
+    initialData: initialUsers,
+  });
+  
+  return (
+    <div>
+      {users?.map((user) => (
+        <div key={user.id}>{user.name}</div>
+      ))}
+    </div>
+  );
+}
+```
+
+## 🚫 ANTI-PATTERNS - WHAT NOT TO DO
+
+### FORBIDDEN PATTERNS
+
+**❌ DO NOT:**
+- Create custom UI components instead of using shadcn/ui
+- Use npm/yarn commands instead of Bun
+- Use fetch directly instead of tRPC
+- Use React Query manually without tRPC integration
+- Mix Pages Router with App Router
+- Skip type safety with tRPC
+
+**❌ WRONG EXAMPLES:**
+```typescript
+// ❌ WRONG - Custom component instead of shadcn/ui
+const CustomButton = () => <button>Click me</button>;
+
+// ❌ WRONG - Direct fetch instead of tRPC
+const response = await fetch("/api/users");
+
+// ❌ WRONG - React Query without tRPC
+const { data } = useQuery(["users"], () => fetch("/api/users").then(r => r.json()));
+```
+
+## 📋 IMPLEMENTATION CHECKLIST
+
+### PRE-IMPLEMENTATION CHECKS
+
+Before implementing any feature:
+- [ ] Can I use shadcn/ui components instead of custom?
+- [ ] Are we using Bun for package management?
+- [ ] Is this API call going through tRPC?
+- [ ] Are we using TanStack Query for data fetching?
+- [ ] Is the route using Hono if it's a custom endpoint?
+- [ ] Is this following Next.js 15 App Router patterns?
+
+### POST-IMPLEMENTATION VALIDATION
+
+After implementation:
+- [ ] All UI uses shadcn/ui components
+- [ ] All API calls use tRPC
+- [ ] All data fetching uses TanStack Query
+- [ ] No npm/yarn commands were used
+- [ ] Type safety is maintained throughout
+- [ ] Follows Next.js 15 conventions
+
+## 🔄 STACK-SPECIFIC REFACTORING
+
+### WHEN TO REFACTOR
+
+**Refactor when:**
+- Custom components exist that can use shadcn/ui
+- Direct fetch calls exist instead of tRPC
+- React Query used without tRPC integration
+- npm/yarn commands in scripts
+- Pages Router code exists (migrate to App Router)
+
+## 📚 DOCUMENTATION REQUIREMENTS
+
+### STACK-SPECIFIC DOCS
+
+- Document tRPC router types and inputs
+- Document shadcn/ui component usage patterns
+- Document TanStack Query query keys structure
+- Document Hono middleware usage
+- Document Bun-specific configurations
+
+---
+
+*This technology stack provides type safety, performance, and developer experience. All implementations must leverage these benefits.*

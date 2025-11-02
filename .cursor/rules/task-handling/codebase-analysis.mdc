@@ -1,0 +1,272 @@
+---
+description: Codebase analysis and file size audit - Mandatory codebase understanding before implementation
+globs:
+  - "**/*.js"
+  - "**/*.jsx"
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.py"
+  - "**/*.vue"
+alwaysApply: false
+priority: 3
+triggers: ['new_feature_request', 'existing_codebase_modification', 'refactoring_need']
+conditions: ['existing_project = true', 'file_count > 5']
+mandatory_steps: ['file_size_audit', 'architecture_mapping', 'dependency_analysis']
+depends_on: ['file-size-enforcement.mdc']
+---
+
+# CODEBASE ANALYSIS - MANDATORY UNDERSTANDING
+
+## CORE PRINCIPLE - UNDERSTAND BEFORE IMPLEMENT
+
+This component's core philosophy is very clear: It is mandatory to fully understand the existing codebase before making any code changes. This approach both maintains code quality and prevents wrong implementations.
+
+## MANDATORY ANALYSIS PROTOCOL - MANDATORY STEPS
+
+The system performs the following steps mandatorily on every implementation request:
+
+### STEP 1: FILE SIZE AUDIT (Absolute Priority)
+The first step is always checking file sizes because this affects all subsequent operations:
+
+```javascript
+function performFileSizeAudit(projectPath) {
+    const allFiles = scanProjectFiles(projectPath);
+    const sizeReport = allFiles.map(file => ({
+        path: file.path,
+        lineCount: countLines(file),
+        status: determineStatus(countLines(file)),
+        violationType: getViolationType(countLines(file))
+    }));
+    
+    const violations = sizeReport.filter(file => file.lineCount > 700);
+    const critical = sizeReport.filter(file => file.lineCount > 1000);
+    
+    return {
+        totalFiles: allFiles.length,
+        violations: violations,
+        criticalViolations: critical,
+        implementationBlocked: violations.length > 0
+    };
+}
+```
+
+**File size statuses:**
+- **0-500 lines**: Safe - new code can be added
+- **500-699 lines**: Approaching - careful addition
+- **700-999 lines**: Violation - new code blocked
+- **1000+ lines**: Critical - urgent refactoring required
+
+### STEP 2: ARCHITECTURE MAPPING
+A systematic analysis is performed to understand the general structure of the codebase:
+
+```javascript
+function mapProjectArchitecture(projectPath) {
+    return {
+        frameworkType: detectFramework(projectPath),
+        componentStructure: analyzeComponentHierarchy(projectPath),
+        dependencyFlow: traceDependencies(projectPath),
+        designPatterns: identifyPatterns(projectPath),
+        codeOrganization: assessOrganization(projectPath)
+    };
+}
+```
+
+**Architecture analysis outputs:**
+- Project type detection (React, Vue, Node.js, Python, etc.)
+- Component hierarchy map
+- Dependency flow diagram
+- Design patterns used
+- Code organization structure assessment
+
+### STEP 3: DEPENDENCY ANALYSIS
+Understanding how existing code is connected is critical:
+
+```javascript
+function analyzeDependencies(projectPath) {
+    const importGraph = buildImportGraph(projectPath);
+    const circularDeps = detectCircularDependencies(importGraph);
+    const unusedImports = findUnusedImports(projectPath);
+    const externalDeps = analyzeExternalDependencies(projectPath);
+    
+    return {
+        importStructure: importGraph,
+        circularDependencies: circularDeps,
+        unusedImports: unusedImports,
+        externalDependencies: externalDeps,
+        dependencyHealth: assessDependencyHealth(importGraph)
+    };
+}
+```
+
+## CONTEXT DETECTION SYSTEM - INTELLIGENT ANALYSIS
+
+The system automatically recognizes different project types and adapts the analysis strategy accordingly:
+
+### REACT PROJECT ANALYSIS
+Patterns specifically searched in React projects:
+- Component composition structures
+- Hook usage patterns  
+- State management approaches
+- Context API usages
+- Custom hooks location and usage
+
+```javascript
+function analyzeReactProject(projectPath) {
+    return {
+        componentTypes: categorizeComponents(projectPath),
+        hookUsage: analyzeHookPatterns(projectPath),
+        stateManagement: detectStateManagement(projectPath),
+        routingStructure: analyzeRouting(projectPath)
+    };
+}
+```
+
+### NODE.JS BACKEND ANALYSIS
+Areas to focus on in backend projects:
+- API endpoint structures
+- Database connection patterns
+- Middleware usages
+- Error handling approaches
+
+### PYTHON PROJECT ANALYSIS
+Topics to examine in Python projects:
+- Module organization patterns
+- Class hierarchies
+- Function organization approaches
+- Package structure logic
+
+## BLOCKING CRITERIA - IMPLEMENTATION PREVENTION
+
+Implementation is immediately stopped when certain situations are detected:
+
+### AUTOMATIC BLOCKING SITUATIONS
+```javascript
+function shouldBlockImplementation(analysisResults) {
+    const blockingConditions = [
+        analysisResults.fileSizeViolations.length > 0,
+        analysisResults.criticalArchitecturalIssues.length > 0,
+        analysisResults.circularDependencies.length > 0,
+        analysisResults.majorRefactoringNeeded === true
+    ];
+    
+    return blockingConditions.some(condition => condition === true);
+}
+```
+
+**Blocking reasons:**
+- **File size violations**: 700+ line files
+- **Critical architectural issues**: Circular dependencies, god objects
+- **Dangerous dependencies**: Unused imports, broken dependencies
+- **Major refactoring need**: Systematic changes required
+
+### BLOCKING COMMUNICATION
+```
+🛑 IMPLEMENTASYON DURDURULDU
+📊 Analiz sonuçları:
+   📏 Dosya boyutu ihlalleri: [X files > 700 lines]
+   🏗️ Mimari sorunlar: [detected issues]
+   🔗 Bağımlılık problemleri: [circular deps, unused imports]
+
+🔄 GEREKLİ AKSİYONLAR:
+   1. [Specific refactoring steps]
+   2. [File splitting suggestions]  
+   3. [Architectural arrangements]
+
+⚠️ İmplementasyon bu sorunlar çözülene kadar bloke edilmiştir.
+```
+
+## LEARNING MODELS - CODEBASE UNDERSTANDING
+
+Different analysis depths are applied at different complexity levels:
+
+### SIMPLE PROJECTS (< 10 files)
+- Basic file structure analysis
+- Import/export relationships
+- Basic pattern recognition
+
+### MEDIUM PROJECTS (10-50 files)
+- Detailed architectural analysis
+- Component interaction mapping
+- Performance impact assessment
+- Code quality metrics
+
+### COMPLEX PROJECTS (50+ files)
+- Comprehensive architectural review
+- Cross-module dependency analysis
+- Scalability assessment
+- Technical debt identification
+
+## ANALYSIS REPORTING - COMPREHENSIVE REPORTING
+
+A detailed report is presented to the user after each analysis:
+
+### ANALYSIS REPORT FORMAT
+```
+📊 KOD TABANI ANALİZ RAPORU:
+
+🏗️ PROJE MİMARİSİ:
+   📋 Tip: [React/Vue/Node.js/Python]
+   📁 Dosya sayısı: [X files]
+   🎯 Ana pattern'lar: [detected design patterns]
+
+📏 DOSYA BOYUT DURUMU:
+   ✅ Güvenli dosyalar: [X files] (< 700 lines)
+   ⚠️ Yaklaşan limitler: [X files] (500-699 lines)  
+   🚫 İhlaller: [X files] (700+ lines)
+   💥 Kritik durumlar: [X files] (1000+ lines)
+
+🔗 BAĞIMLILIK DURUMU:
+   📦 Import yapısı: [healthy/problematic]
+   ♻️ Circular dependencies: [X count]
+   ❌ Unused imports: [X count]
+   🔧 Temizlik gerekli: [yes/no]
+
+🎯 İMPLEMENTASYON DURUMU:
+   [✅ Ready / 🔄 After refactoring / 🛑 Blocked]
+```
+
+### REFACTORING SUGGESTIONS
+Systemic suggestions are provided at the end of analysis:
+
+```
+🔧 REFACTORING ÖNERİLERİ:
+
+📏 DOSYA BOYUTU İÇİN:
+   • Split [FileName.tsx] file → [3 recommended files]
+   • [AnotherFile.js] utility extraction → [2 new files]
+
+🏗️ MİMARİ İYİLEŞTİRME:
+   • Organize component hierarchy
+   • Service layer separation
+   • Custom hook extraction
+
+🔗 BAĞIMLILIK TEMİZLİĞİ:
+   • Remove [X count] unused imports
+   • Resolve circular dependency: [specific suggestions]
+   • Import organization: [group-based organization]
+```
+
+## QUALITY ASSURANCE - ANALYSIS VALIDATION
+
+Multiple validation layers to ensure analysis accuracy:
+
+### PRE-ANALYSIS VALIDATION
+- Check that project structure is readable
+- Verify file paths are accessible
+- Check for permission issues
+
+### POST-ANALYSIS VERIFICATION  
+- Check that analysis results are consistent
+- Cross-reference different analysis results
+- Do second pass if missing information
+
+### CONTINUOUS MONITORING
+- Re-check files that change during analysis
+- Perform real-time size monitoring
+- Track dynamic dependency changes
+
+This comprehensive approach ensures no implementation is done with insufficient information and code quality is continuously maintained. Although the analysis process seems to take time, it guarantees the correctness and quality of the implementation to be done afterwards.
+
+---
+
+*Implementing without understanding the codebase is like walking in the dark. This analysis process is the light of implementation.*

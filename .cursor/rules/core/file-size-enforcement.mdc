@@ -1,0 +1,172 @@
+---
+description: ABSOLUTE file size control - Code addition blockage at 700+ lines and mandatory refactoring
+globs:
+  - "**/*.js"
+  - "**/*.jsx" 
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.vue"
+  - "**/*.py"
+alwaysApply: true
+priority: 1
+triggers: ['file_modification', 'code_addition', 'new_implementation']
+enforcement_level: absolute
+---
+
+# FILE SIZE CONTROL - ABSOLUTE ENFORCEMENT
+
+## 🚨 CRITICAL RULE - NO EXCEPTIONS
+
+This component has priority over all other rules. No operation can violate file size limits.
+
+## ABSOLUTE LIMITS
+
+### HARD LIMITS (Unchangeable)
+- **Maximum file size**: 1000 lines (including comments and empty lines)
+- **Blockage threshold**: 700 lines
+- **At 700+ lines**: NO NEW CODE CAN BE ADDED (ZERO TOLERANCE)
+- **Emergency exception**: Maximum +50 lines (only for critical bugfix)
+
+### ENFORCEMENT PROTOCOL
+
+#### STEP 1: PRE-CHECK BLOCKAGE (On every code change)
+```javascript
+function enforceFileSizeBeforeAnyChange() {
+    const currentLines = countFileLines(targetFile);
+    
+    if (currentLines >= 700) {
+        BLOCK_ALL_CODE_ADDITIONS();
+        REQUIRE_IMMEDIATE_REFACTORING();
+        return STATUS_BLOCKED;
+    }
+    
+    return STATUS_ALLOWED;
+}
+```
+
+#### STEP 2: MANDATORY REFACTORING
+**When 700+ lines detected:**
+1. **IMMEDIATELY STOP**: Block all code addition operations
+2. **NOTIFY USER**: Clearly state refactoring is required
+3. **PROVIDE SOLUTION**: Suggest how to split the file
+4. **PRIORITIZE**: Perform this operation before anything else
+
+#### STEP 3: REFACTORING STRATEGIES
+
+**File splitting techniques:**
+- **Feature Separation**: Move related features to separate files
+- **Component Splitting**: Split large components  
+- **Utility Extraction**: Move helper functions to separate file
+- **Type Definitions**: Move type definitions to separate file
+- **Hook Extraction**: Move custom hooks to separate file
+- **Service Separation**: Move business logic to service files
+
+## EXCEPTION HANDLERS - VERY LIMITED
+
+### PERMITTED EXCEPTIONS (Very limited)
+
+#### 1. NEW FILE INTEGRATION (+20 lines max)
+```javascript
+// ONLY these types of additions are permitted:
+import { NewComponent } from './components/NewComponent';
+import { newUtility } from './utils/newUtility';
+
+// Connection code (minimal)
+const connectionLogic = () => { /* minimal code */ };
+export { connectionLogic };
+```
+
+#### 2. REFACTORING CONNECTIONS (+15 lines max)
+```javascript
+// Import/export updates after refactoring
+export { MovedFunction } from './newFile';
+export { AnotherMovedFunction } from './anotherNewFile';
+```
+
+#### 3. CRITICAL BUG FIX (+50 lines max)
+- **Production error** fix
+- **Security vulnerability** remediation
+- **System crash** prevention
+- **Data loss** prevention
+
+**Emergency protocol:**
+```javascript
+// TODO: EMERGENCY FIX - REFACTORING REQUIRED ASAP
+// Added: 2024-XX-XX - Reason: [Critical bug description]
+// Schedule: Refactor within 24 hours
+// Max lines added: XX/50
+```
+
+### EXCEPTION REJECTION - NOT ACCEPTED
+
+**These situations are never considered exceptions:**
+- ❌ "I'm just adding a small feature"
+- ❌ "Refactoring can wait" 
+- ❌ "Just this once"
+- ❌ "No time, need to do it quickly"
+- ❌ "Just a few lines"
+
+## ENFORCEMENT COMMUNICATION
+
+### BLOCKAGE NOTIFICATION
+```
+🚫 FILE SIZE VIOLATION DETECTED
+📏 Current size: [X] lines / 1000 limit
+⚠️  Blockage threshold exceeded: [X] > 700 lines
+🔄 REQUIRED ACTION: Immediate refactoring required
+❌ NO NEW CODE CAN BE ADDED (No exception to this rule)
+
+📋 RECOMMENDED REFACTORING STRATEGY:
+- [Specific splitting suggestions]
+- [New file recommendations]
+- [Import structure updates]
+```
+
+### REFACTORING COMPLETION NOTIFICATION
+```
+✅ REFACTORING COMPLETED
+📁 New files created: [list]
+📏 Current file sizes: [list with line counts]
+🔗 Import structure updated: [changes]
+🎯 STATUS: Ready for code addition (size limits compliant)
+```
+
+### EMERGENCY EXCEPTION NOTIFICATION
+```
+⚠️  EMERGENCY EXCEPTION ACTIVATED
+🚨 Reason: [critical bug/security/crash description]
+📏 Lines added: [X]/50 emergency limit
+⏰ MANDATORY: Refactoring scheduled within 24 hours
+📝 TODO added: Immediate cleanup required
+```
+
+## QUALITY CONTROL GATES
+
+### Pre-operation checks:
+- [ ] **Target file size checked**
+- [ ] **700+ line check performed** 
+- [ ] **Blockage applied if necessary**
+- [ ] **Refactoring plan created**
+- [ ] **User notified**
+
+### Post-operation validation:
+- [ ] **No file exceeds 1000 lines**
+- [ ] **Newly added code within limits**
+- [ ] **Emergency exception documented**
+- [ ] **Refactoring needs identified**
+
+## SYSTEM INTEGRATION
+
+**Relationships with other components:**
+- `clean-code-standards.mdc`: File size checked after cleanup
+- `codebase-analysis.mdc`: File sizes reported during analysis  
+- `simple-task-handling.mdc`: Even simple tasks go through size control
+- `complex-project-management.mdc`: Complex projects check size first
+
+**Priority order:**
+1. FILE SIZE CONTROL (Highest priority)
+2. All other rules (After size control passes)
+
+---
+
+*This component remains active as the most critical rule in our system and accepts no exceptions.*

@@ -1,0 +1,205 @@
+---
+description: Turkish user communication and English code writing standards - Communication protocols
+globs:
+  - "**/*"
+  - "**/.*"
+alwaysApply: true
+priority: 2
+triggers: ['user_communication', 'code_writing', 'documentation', 'error_messages']
+communication_language: turkish
+code_language: english
+type: core_component
+component_id: language-rules
+---
+
+# LANGUAGE RULES - COMMUNICATION STANDARDS
+
+## CORE PRINCIPLE - DUAL LANGUAGE APPROACH
+
+This system strategically separates Turkish and English. Each language has its own specific usage areas, and this separation optimizes code quality and user experience.
+
+## 🇹🇷 TURKISH USAGE AREAS
+
+### USER COMMUNICATION (Absolute Turkish)
+All communication with the user must be in Turkish because this is the user's native language and the most effective language for learning and understanding.
+
+**Turkish usage cases:**
+- All explanations and responses directed to user
+- Status notifications and system messages  
+- Error messages and warnings
+- Project explanations and documentation
+- Solution suggestions and alternatives
+- Quality control reports
+- Refactoring suggestions and plans
+
+### COMMUNICATION EXAMPLES
+```
+✅ CORRECT:
+"Dosya boyutu kontrolü yapıldı: 847 satır / 1000 limit"
+"Import yapısı optimize edildi: 3 kullanılmayan import kaldırıldı"
+"Kod yapısı iyileştirildi: tek sorumluluk ilkesi uygulandı"
+
+❌ WRONG:
+"File size check completed: 847 lines / 1000 limit"
+"Import structure optimized: 3 unused imports removed"
+```
+
+## 🔤 ENGLISH USAGE AREAS
+
+### CODE AND TECHNICAL STRUCTURES (Absolute English)
+Using English in code follows international standards, facilitates library integrations, and improves code readability.
+
+**English usage cases:**
+- All code writing and comments
+- Variable and function names
+- File and folder names
+- Import/export statements
+- API research and documentation
+- Library and framework research
+- Technical terms (except necessary cases)
+
+### CODE WRITING EXAMPLES
+```javascript
+✅ CORRECT:
+// User authentication component with validation
+const UserAuthComponent = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userCredentials, setUserCredentials] = useState(null);
+  
+  const handleUserLogin = (credentials) => {
+    // Validate credentials and update state
+    validateUserCredentials(credentials);
+  };
+  
+  return (
+    <div className="auth-container">
+      {/* Authentication form content */}
+    </div>
+  );
+};
+
+❌ WRONG:
+// Kullanıcı doğrulama bileşeni
+const KullaniciDogrulama = () => {
+  const [girisYapildiMi, setGirisYapildiMi] = useState(false);
+```
+
+## COMPLEX SITUATIONS - SOLUTION STRATEGIES
+
+### APPROACH FOR TECHNICAL TERMS
+In some cases, technical terms can be used in both Turkish and English. Decide which language is more understandable.
+
+**Example approaches:**
+- "Component" → "Bileşen" (when explaining to user in Turkish)
+- "State" → "Durum" or "State" (depending on context)
+- "Hook" → "Hook" (because it's an established term)
+- "Import" → "Import" (as a technical term)
+
+### HYBRID COMMUNICATION EXAMPLE
+```
+Explanation (Turkish): "UserProfile component'ini optimize ettim"
+Code (English): 
+const UserProfile = ({ userId, displayMode }) => {
+  // Component logic here
+}
+```
+
+## CONTEXT-BASED COMMUNICATION PROTOCOLS
+
+### SIMPLE TASK COMMUNICATION
+```
+🎯 Görev tamamlandı: Button component'i oluşturuldu
+📁 Dosya: src/components/Button/Button.jsx (89 satır)
+🧹 Temizlik: 2 kullanılmayan import kaldırıldı
+✅ Kalite kontrol: Tüm standartlar uygulandı
+```
+
+### COMPLEX PROJECT COMMUNICATION  
+```
+🏗️ Proje yapısı analiz edildi: React + TypeScript architecture
+📋 Tespit edilen dosyalar: 15 component, 8 hook, 5 service dosyası
+⚠️ Boyut uyarısı: 3 dosya refactoring gerektiyor (700+ satır)
+🔄 Planlanan işlemler: 
+   1. Header.tsx dosyasını böl (892 satır → 3 dosya)  
+   2. UserService.ts optimize et (743 satır → utility extraction)
+   3. Import yapısını güncelle
+```
+
+### ERROR AND WARNING COMMUNICATION
+```
+🚫 HATA: Dosya boyutu limiti aşıldı
+📏 Mevcut durum: Dashboard.tsx (1,247 satır / 1000 limit)
+⚡ Acil eylem: Derhal refactoring gerekli
+🔧 Önerilen çözüm:
+   - Dashboard logic'i ayrı hook'a taşı
+   - Chart component'lerini ayrı dosyalara böl
+   - API call'ları service dosyasına al
+```
+
+## QUALITY CONTROL COMMUNICATION
+
+### SUCCESSFUL OPERATION REPORT
+Every operation should end with a clear report to the user in Turkish:
+
+```
+✅ İŞLEM TAMAMLANDI
+🎯 Yapılan: [specific action in Turkish]
+📏 Dosya durumu: [file status in Turkish] 
+🧹 Temizlik: [cleanup actions in Turkish]
+🔄 Optimize: [optimization details in Turkish]
+⚠️ Uyarı: [warnings if any, in Turkish]
+```
+
+### BLOCKAGE STATUS COMMUNICATION
+```
+🛑 İŞLEM DURDURULDU
+❌ Sebep: [reason in Turkish]
+🎯 Gerekli aksiyon: [required action in Turkish]  
+📋 Adım adım çözüm:
+   1. [step 1 in Turkish]
+   2. [step 2 in Turkish]
+   3. [step 3 in Turkish]
+```
+
+## EDUCATIONAL APPROACH LANGUAGE USAGE
+
+### COMMUNICATION IN TEACHING MODE
+When the user is focused on learning, explanations should be detailed in Turkish, but code examples should remain in English standards.
+
+```
+Açıklama: 
+"React'te state yönetimi için useState hook'unu kullanıyoruz. Bu hook component'in
+dahili durumunu takip etmemizi sağlar. İşte nasıl çalıştığı:"
+
+Code example:
+const [count, setCount] = useState(0);
+
+const handleIncrement = () => {
+  setCount(prevCount => prevCount + 1);
+};
+
+Açıklama devamı:
+"Burada count değişkeni mevcut durumu, setCount fonksiyonu ise durumu 
+güncellemek için kullandığımız setter fonksiyonudur."
+```
+
+## SYSTEM INTEGRATION
+
+### RELATIONSHIP WITH OTHER COMPONENTS
+These language rules determine the communication standard for all other components:
+
+- `file-size-enforcement.mdc`: Size control messages in Turkish
+- `clean-code-standards.mdc`: Code quality reports in Turkish  
+- `educational-approach.mdc`: Teaching explanations in Turkish
+- `emergency-protocols.mdc`: Emergency notifications in Turkish
+
+### CONSISTENCY CHECK
+Check language usage consistency in every response:
+- [ ] User communication done in Turkish
+- [ ] Code and technical structures written in English
+- [ ] Hybrid situations handled appropriately
+- [ ] Technical terms selected according to context
+
+---
+
+*This language strategy enables effective learning in the user's native language while maintaining code quality at international standards.*

@@ -1,0 +1,313 @@
+---
+description: Clean code standards - Unused import cleanup, dead code elimination and code quality control
+globs:
+  - "**/*.js"
+  - "**/*.jsx"
+  - "**/*.ts" 
+  - "**/*.tsx"
+  - "**/*.vue"
+  - "**/*.py"
+alwaysApply: true
+priority: 2
+triggers: ['code_modification', 'import_changes', 'refactoring', 'new_implementation']
+enforcement_level: zero_tolerance
+depends_on: ['file-size-enforcement.mdc']
+---
+
+# CLEAN CODE STANDARDS - QUALITY CONTROL
+
+## CORE PHILOSOPHY - ZERO TOLERANCE
+
+Writing clean code is not optional, it is an absolute requirement. This component activates on every code change and enforces quality standards.
+
+## IMPORT MANAGEMENT - ZERO TOLERANCE
+
+### AUTOMATIC IMPORT CLEANUP
+Before every file change, an import audit protocol is executed:
+
+```javascript
+function performImportAudit(filePath) {
+    const imports = extractAllImports(filePath);
+    const usages = scanCodeForUsages(filePath);
+    
+    const unusedImports = imports.filter(imp => 
+        !usages.includes(imp.identifier)
+    );
+    
+    if (unusedImports.length > 0) {
+        IMMEDIATELY_REMOVE(unusedImports);
+        REPORT_CLEANUP(unusedImports);
+    }
+}
+```
+
+### IMPORT CLEANUP RULES
+
+**Imports to be removed immediately:**
+- ✅ Unused imports
+- ✅ Unnecessary wildcard imports (`import * as`)
+- ✅ Duplicate imports (multiple from same source)
+- ✅ Dev-only imports (unnecessary in production)
+
+**Import optimization:**
+```javascript
+// ❌ BEFORE (Bad)
+import * as React from 'react';
+import { useState } from 'react';
+import { Button } from '@material-ui/core';
+import { Button as MuiButton } from '@material-ui/core';
+
+// ✅ AFTER (Good)
+import React, { useState } from 'react';
+import { Button } from '@material-ui/core';
+```
+
+### IMPORT ORGANIZATION STANDARDS
+
+**Sorting order (automatic):**
+1. **External libraries** (react, lodash, etc.)
+2. **Internal libraries** (company packages)
+3. **Relative imports** (./components, ../utils)
+4. **Type imports** (separate block)
+
+```javascript
+// External
+import React, { useState, useEffect } from 'react';
+import { debounce } from 'lodash';
+
+// Internal  
+import { apiCall } from '@company/api-utils';
+
+// Relative
+import { Button } from './Button';
+import { validateInput } from '../utils/validation';
+
+// Types
+import type { User } from '../types/User';
+import type { ApiResponse } from './types';
+```
+
+## CODE QUALITY CONTROLS - ABSOLUTE RULES
+
+### UNUSED CODE ELIMINATION
+
+**Code blocks to be removed immediately:**
+- ❌ Unused variables
+- ❌ Unused functions  
+- ❌ Empty functions or components
+- ❌ Commented-out code blocks
+- ❌ Console.log statements (debug purpose)
+- ❌ Dead code paths (unreachable code)
+
+**Cleanup example:**
+```javascript
+// ❌ BEFORE (Dirty)
+const MyComponent = () => {
+  const unusedVariable = 'never used';
+  const [count, setCount] = useState(0);
+  const [name, setName] = useState(''); // never used
+  
+  // console.log('debug info'); // commented debug
+  
+  const unusedFunction = () => {
+    // some logic that's never called
+  };
+  
+  const emptyFunction = () => {};
+  
+  return <div>{count}</div>;
+};
+
+// ✅ AFTER (Clean)
+const MyComponent = () => {
+  const [count, setCount] = useState(0);
+  
+  return <div>{count}</div>;
+};
+```
+
+### SINGLE RESPONSIBILITY PRINCIPLE ENFORCEMENT
+
+Every component, function or file must fulfill only one responsibility:
+
+**Component level:**
+```javascript
+// ❌ WRONG (Multiple responsibilities)
+const UserProfileAndSettings = () => {
+  // User profile logic
+  // Settings management logic  
+  // API calls for both
+  // Validation for both
+  return (/* complex mixed UI */);
+};
+
+// ✅ CORRECT (Single responsibility)
+const UserProfile = () => {
+  // Only profile display logic
+  return (/* profile UI */);
+};
+
+const UserSettings = () => {
+  // Only settings management
+  return (/* settings UI */);
+};
+```
+
+### CONCISE IMPLEMENTATION - MINIMAL CODE
+
+**Over-engineering prevention:**
+- ✅ Prefer the simplest working solution
+- ✅ Avoid unnecessary abstractions
+- ✅ Don't do premature optimization
+- ✅ YAGNI (You Ain't Gonna Need It) principle
+
+**Minimal implementation example:**
+```javascript
+// ❌ OVER-ENGINEERED
+class UserManager {
+  constructor() {
+    this.users = new Map();
+    this.observers = [];
+    this.middleware = [];
+  }
+  
+  addMiddleware(fn) { /* complex logic */ }
+  notifyObservers() { /* complex logic */ }
+  // ... 50+ lines of unnecessary complexity
+}
+
+// ✅ MINIMAL AND SUFFICIENT
+const users = [];
+
+const addUser = (user) => users.push(user);
+const getUser = (id) => users.find(u => u.id === id);
+```
+
+## REFACTORING TRIGGERS
+
+### AUTOMATIC REFACTORING SIGNALS
+System automatically suggests refactoring when it detects:
+
+1. **Duplicate Code Detection** (3+ repeated patterns)
+2. **Long Parameter Lists** (5+ parameters)
+3. **Complex Conditional Logic** (3+ nested levels)
+4. **Magic Numbers/Strings** (hardcoded values)
+5. **God Functions** (20+ lines, multiple responsibilities)
+
+### REFACTORING STRATEGIES
+
+**Extract Function Pattern:**
+```javascript
+// ❌ BEFORE (Long method)
+const processUserData = (userData) => {
+  // 30+ lines of processing logic
+  const validated = validateEmail(userData.email) && 
+                   validateAge(userData.age) &&
+                   validateName(userData.name);
+  // more processing...
+};
+
+// ✅ AFTER (Extracted)
+const processUserData = (userData) => {
+  const validated = validateUserData(userData);
+  if (!validated) return null;
+  
+  return normalizeUserData(userData);
+};
+
+const validateUserData = (userData) => {
+  return validateEmail(userData.email) && 
+         validateAge(userData.age) &&
+         validateName(userData.name);
+};
+```
+
+## QUALITY GATES - ABSOLUTE CONTROLS
+
+### PRE-IMPLEMENTATION CHECKS
+Before every code change:
+- [ ] **Target file size check** (700+ line check)
+- [ ] **Import audit** (unused imports scan)
+- [ ] **Existing code quality scan** (dead code detection)
+- [ ] **Dependency analysis** (unnecessary dependencies)
+
+### POST-IMPLEMENTATION VALIDATION  
+After every code change:
+- [ ] **No unused imports** (zero unused imports)
+- [ ] **No dead code** (zero unnecessary code)
+- [ ] **Single responsibility maintained** (single responsibility principle)
+- [ ] **Minimal implementation achieved** (minimum code)
+- [ ] **File size compliance** (within size limits)
+
+## REPORTING STANDARDS
+
+### CLEANUP REPORT FORMAT
+```
+🧹 CODE CLEANUP COMPLETED:
+   ❌ Removed unused imports: [import list]
+   ❌ Deleted dead code blocks: [block list]  
+   ❌ Cleaned empty functions: [function list]
+   ❌ Removed debug code: [debug statement count]
+
+✅ CODE QUALITY IMPROVEMENTS:
+   🎯 Single responsibility applied: [component list]
+   📦 Extracted items: [extracted functions/components]
+   🔄 Refactored structures: [refactored structures]
+   
+📊 RESULT:
+   📏 File size: [X lines] / 1000 limit - [STATUS]
+   🚀 Code quality: [improvement summary]
+   ⚡ Performance impact: [performance notes]
+```
+
+### OPTIMIZATION REPORT
+```
+⚡ CODE OPTIMIZATION:
+   📦 Import structure: [changes made]
+   🔧 Function extraction: [new functions created]  
+   🎯 Component splitting: [new components created]
+   🧮 Logic consolidation: [duplicate code removed]
+
+📈 QUALITY METRICS:
+   📏 Average function size: [X lines]
+   🎯 Component responsibilities: [single/multiple]
+   🔄 Code reusability: [reusable blocks identified]
+```
+
+## ENFORCEMENT POLICY - ZERO TOLERANCE
+
+### AUTOMATIC ENFORCEMENT
+- **Unused imports**: Automatically removed, not asked to user
+- **Dead code**: Immediately deleted, no backup taken  
+- **Empty functions**: Instantly removed
+- **Console logs**: Debug purpose ones are cleaned
+
+### MANUAL REVIEW REQUIRED
+- **Complex refactoring**: User approval requested
+- **Architecture changes**: Plan presented, approval awaited
+- **Breaking changes**: Impact analysis performed
+
+### NON-NEGOTIABLE RULES
+These rules can never be relaxed:
+1. ❌ Unused imports cannot be left
+2. ❌ Dead code cannot be tolerated  
+3. ❌ Empty implementation cannot be accepted
+4. ❌ Over-engineering cannot be done
+5. ❌ Single responsibility cannot be violated
+
+## SYSTEM INTEGRATION
+
+### SYNCHRONIZATION WITH OTHER COMPONENTS
+- `file-size-enforcement.mdc`: Size control after cleanup
+- `codebase-analysis.mdc`: Quality metrics during analysis
+- `simple-task-handling.mdc`: Quality standard even in simple tasks
+- `complex-project-management.mdc`: Systematic cleanup in large projects
+
+### PRIORITY INTEGRATION  
+1. **First**: File size enforcement (stop if blockage exists)
+2. **Second**: Clean code standards (this component)  
+3. **Third**: All other rules
+
+---
+
+*Writing clean code is not a luxury, it's a necessity. These standards are absolutely applied in every project.*

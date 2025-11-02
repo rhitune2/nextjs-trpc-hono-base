@@ -1,0 +1,293 @@
+---
+description: Fast task management optimized for single file and simple changes - Direct implementation without MCP tools
+globs:
+  - "**/*.js"
+  - "**/*.jsx"
+  - "**/*.ts"
+  - "**/*.tsx" 
+  - "**/*.css"
+  - "**/*.scss"
+alwaysApply: false
+priority: 4
+triggers: ['single_file_modification', 'simple_implementation', 'quick_fix', 'minor_feature_addition']
+conditions: ['file_count <= 2', 'line_changes < 50', 'no_new_dependencies']
+mcp_tools: disabled
+depends_on: ['file-size-enforcement.mdc', 'clean-code-standards.mdc', 'language-rules.mdc']
+---
+
+# SIMPLE TASK HANDLING - FAST AND EFFICIENT
+
+## DEFINITION - WHAT IS A SIMPLE TASK?
+
+Simple task definition is determined by clear and measurable criteria:
+
+### SIMPLE TASK CRITERIA
+✅ **File count**: 1-2 files maximum  
+✅ **Line changes**: Less than 50 lines addition/modification  
+✅ **Complexity**: Single feature or bug fix  
+✅ **Dependency**: Does not require new libraries  
+✅ **Scope**: Single component or single function  
+
+### SIMPLE TASK EXAMPLES
+- Creating Button component
+- CSS styling changes  
+- Fixing a single bug
+- Adding form validation
+- Implementing loading state
+- Creating single hook
+- Writing utility function
+
+## STREAMLINED WORKFLOW - OPTIMIZED PROCESS
+
+### 3-STEP PROCESS
+Very fast and efficient process for simple tasks:
+
+```
+1. FAST CHECK → 2. DIRECT IMPLEMENT → 3. QUALITY VALIDATE
+     (5 sec)            (Main process)              (10 sec)
+```
+
+#### STEP 1: FAST CHECK (Quick Check)
+```javascript
+function fastPreCheck() {
+    return {
+        fileSizeOk: checkTargetFileSize() < 700,
+        scopeSimple: isTaskScopeSimple(),
+        dependencyClean: noNewDependenciesRequired()
+    };
+}
+```
+
+**Fast check items:**
+- [ ] **Target file size** < 700 lines (2 seconds)
+- [ ] **Task scope** is simple? (2 seconds)  
+- [ ] **New dependency** needed? (1 second)
+
+#### STEP 2: DIRECT IMPLEMENT (Direct Application)  
+If fast check passes, direct implementation:
+- ✅ **No MCP tools** (no time waste)
+- ✅ **Direct code writing** (start immediately)
+- ✅ **Focused implementation** (only necessary code)
+- ✅ **Minimal approach** (no over-engineering)
+
+#### STEP 3: QUALITY VALIDATE (Quality Verification)
+```javascript
+function quickQualityCheck() {
+    return {
+        unusedImportsRemoved: cleanupImports(),
+        deadCodeEliminated: removeDeadCode(),
+        fileSizeCompliant: checkFinalFileSize(),
+        singleResponsibility: validateComponentFocus()
+    };
+}
+```
+
+## NO MCP TOOLS POLICY - FAST EXECUTION
+
+### WHY NO MCP TOOL?
+MCP tool usage in simple tasks creates efficiency loss:
+
+**MCP tool overhead:**
+- Sequential thinking: +15-30 seconds
+- Context switching: +10 seconds  
+- Tool initialization: +5 seconds
+- **Total overhead**: +30-45 seconds
+
+**Direct approach benefit:**
+- Immediate implementation: 0 seconds overhead
+- Focused execution: Less distraction
+- Faster user feedback: Immediate result
+
+### MCP TOOL EXCEPTIONS - LIMITED USAGE
+Only use MCP tool in these situations:
+- **Unknown codebase**: Unseen project structure
+- **Complex dependencies**: 3+ file interaction
+- **User explicitly requests**: "Explain step by step"
+
+## IMPLEMENTATION PATTERNS - PROVEN FORMULAS
+
+### COMPONENT CREATION PATTERN
+```javascript
+// Template for simple component creation
+const NewComponent = ({ prop1, prop2 }) => {
+  // Single responsibility focus
+  const handleAction = () => {
+    // Minimal logic
+  };
+
+  return (
+    <div className="component-container">
+      {/* Clean, focused JSX */}
+    </div>
+  );
+};
+
+export default NewComponent;
+```
+
+### UTILITY FUNCTION PATTERN
+```javascript
+// Template for simple utility functions  
+export const utilityFunction = (input) => {
+  // Input validation (if needed)
+  if (!input) return null;
+  
+  // Core logic (minimal)
+  const result = processInput(input);
+  
+  // Return processed result
+  return result;
+};
+```
+
+### BUG FIX PATTERN  
+```javascript
+// Template for simple bug fixes
+// 1. Identify the minimal change needed
+// 2. Apply the fix without over-engineering  
+// 3. Test the specific fix (no scope creep)
+
+// Example:
+// ❌ Before (buggy)
+const calculateTotal = (items) => {
+  return items.reduce((sum, item) => sum + item.price); // Missing initial value
+};
+
+// ✅ After (fixed)
+const calculateTotal = (items) => {
+  return items.reduce((sum, item) => sum + item.price, 0);
+};
+```
+
+## EFFICIENCY OPTIMIZATION - TIME SAVING
+
+### TIME SAVING STRATEGIES
+
+**Import management optimization:**
+```javascript
+// Automatic import optimization during implementation
+// Instead of asking user, just clean and organize
+import React, { useState } from 'react'; // Consolidated  
+import { Button, Input } from './components'; // Organized
+// Removed: import { unused } from 'somewhere'; // Auto-removed
+```
+
+**Code structure optimization:**
+```javascript
+// Apply single responsibility automatically
+// If component doing multiple things, suggest split immediately:
+
+// ❌ Detected: Multiple responsibilities
+const UserProfileAndSettings = () => {/*...*/};
+
+// ✅ Auto-suggest split:
+"This component is doing two different tasks. Let's split it:"
+// UserProfile.jsx
+// UserSettings.jsx
+```
+
+### RAPID FEEDBACK LOOPS
+
+**Immediate status reporting:**
+```
+🚀 BASİT GÖREV - HIZLI MOD
+📁 Hedef: Button.jsx (156 satır / 1000 limit - ✅ UYGUN)  
+⚡ Implementing... (directly writing code)
+🧹 Auto-cleanup: 1 unused import removed
+✅ Tamamlandı: 23 satır eklendi, kalite kontrol geçti
+```
+
+## QUALITY GATES - SIMPLIFIED VALIDATION
+
+### PRE-IMPLEMENTATION (Quick)
+- [ ] File size < 700 lines (2 sec check)
+- [ ] Scope is simple (mental check)  
+- [ ] No new dependencies needed
+
+### POST-IMPLEMENTATION (Automatic)
+- [ ] Unused imports cleaned ✅
+- [ ] Dead code removed ✅  
+- [ ] File size still compliant ✅
+- [ ] Single responsibility maintained ✅
+
+### QUALITY REPORT - CONCISE FORMAT
+```
+✅ BASİT GÖREV TAMAMLANDI
+🎯 Yapılan: [specific implementation] 
+📏 Dosya durumu: [X satır] (+[Y added]) - [STATUS]
+🧹 Otomatik temizlik: [cleanup summary]
+⚡ Süre: [estimated time] - [efficiency note]
+```
+
+## ERROR HANDLING - RAPID RESOLUTION
+
+### COMMON SIMPLE TASK ERRORS
+
+**File size violation:**
+```
+🛑 HIZLI MOD ENGELLEME  
+📏 Hedef dosya: [X satır] > 700 limit
+🔄 Gerekli: Önce refactoring, sonra feature
+📋 Hızlı çözüm: [specific refactoring steps]
+```
+
+**Scope creep detection:**
+```  
+⚠️ SCOPE ARTIŞI TESPİT EDİLDİ
+🎯 Başlangıç: [original simple task]
+📈 Mevcut: [expanded scope]  
+🔄 Öneri: Scope'u basit tut veya complex mode'a geç
+```
+
+## PERFORMANCE TRACKING
+
+### EFFICIENCY METRICS
+- **Task completion time**: < 2 minutes target
+- **Code quality score**: Automatic validation pass
+- **User satisfaction**: Immediate working solution
+- **File size impact**: Minimal size increase
+
+### OPTIMIZATION OPPORTUNITIES
+```
+📊 BASİT GÖREV PERFORMANCE:
+⏱️  Ortalama süre: [X seconds]  
+🎯 Başarı oranı: [%X tasks completed without issues]
+🔄 Refactoring trigger: [%X tasks needed file splitting]  
+⚡ Efficiency gain: [X%] faster than complex mode
+```
+
+## ESCALATION RULES - COMPLEXITY DETECTION
+
+### WHEN TO SWITCH TO COMPLEX MODE
+If these situations are detected during simple task, switch to complex mode:
+
+- **File size violation** detected (>700 lines)
+- **Multiple file modification** needed  
+- **New dependency** requirements emerge
+- **Architecture change** needed
+- **User requests step-by-step** explanation
+
+**Escalation message:**
+```
+🔄 COMPLEX MODE'A GEÇİŞ GEREKİYOR
+📋 Sebep: [escalation reason]
+🎯 Yeni yaklaşım: [complex project management]
+📚 Yüklenen componentler: [list of additional components]
+```
+
+## SYSTEM INTEGRATION
+
+### COMPONENT INTERACTION OPTIMIZATION
+- `file-size-enforcement.mdc`: Fast integration as pre-check  
+- `clean-code-standards.mdc`: Post-implementation auto-apply
+- `language-rules.mdc`: Continuous Turkish communication
+
+### EFFICIENCY PRIORITIZATION
+1. **Speed**: Fastest working solution
+2. **Quality**: Automatic quality standards  
+3. **Simplicity**: Over-engineering prevention
+4. **User satisfaction**: Immediate working result
+
+---
+
+*Over-engineering for simple tasks is an efficiency killer. This component optimizes the maximum speed and quality balance.*
